@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Net;
 
 public class IPAddress : DictionaryBase
 {
@@ -13,6 +14,26 @@ public class IPAddress : DictionaryBase
     public void Remove(string name)
     {
         base.InnerHashtable.Remove(name);
+    }
+    public void ShowAllIPs(){
+        IDictionaryEnumerator e = (IDictionaryEnumerator)base.InnerHashtable.
+        GetEnumerator();
+        List <KeyValuePair<string,string>> list = new List<KeyValuePair<string, string>>();
+        while (e.MoveNext()){
+            KeyValuePair<string,string> v= new KeyValuePair<string,string>((string)e.Key,(string)e.Value);
+            list.Add(v);
+        }
+        for (int i = 0; i < list.Count-1;i++){
+            for (int j=i+1; j < list.Count;j++){
+                if (list[i].Value.CompareTo(list[j].Value)>=0){
+                    KeyValuePair <string,string> temp=list[i];
+                    list[i] = list[j];
+                    list[j] = temp;
+                }
+            }
+        }
+        foreach(KeyValuePair<string, string> v in list)
+            Console.WriteLine($"Key={v.Key}, Value={v.Value}");
     }
 }
 public class BucketHash
@@ -59,14 +80,19 @@ public class Program
         myips.Add("Mike", "192.151.0.1");
         myips.Add("David", "192.151.0.2");
         myips.Add("Bernica", "192.151.0.3");
-        Console.WriteLine("IP cua Mike la: " + myips.Item("Mike"));
-        Console.WriteLine("\nKey va value la:");
-        IDictionaryEnumerator e = myips.GetEnumerator();
-        while (e.MoveNext())
-            Console.WriteLine("key={0},value={1}", e.Key, e.Value);
-
+        /*foreach(object item in myips)
+            Console.WriteLine(item);*/
+        myips.ShowAllIPs();
+        /*myips.Swap("Mike", "Bernica");
+        foreach(object item in myips)
+            Console.WriteLine(item);*/
+        /*Console.WriteLine("IP cua Mike la: " + myips.Item("Mike"));
+        Console.WriteLine("\nKey va value la:");*/
+        //IDictionaryEnumerator e = myips.GetEnumerator();
+        //while (e.MoveNext())
+            //Console.WriteLine("key={0},value={1}", e.Key, e.Value);
         //---- Example for Hashtable
-        Hashtable infos = new Hashtable(5);
+        /*Hashtable infos = new Hashtable(5);
         infos.Add("salary", 100000);
         infos.Add("name", "David Job");
         infos.Add("age", 45);
@@ -78,6 +104,6 @@ public class Program
         Console.WriteLine("Value:");
         foreach (object value in infos.Values)
             Console.WriteLine(value);
-        Console.ReadLine();
+        Console.ReadLine();*/
     }
 }
